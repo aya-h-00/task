@@ -12,18 +12,18 @@ struct Person {
 
 int main() {
     int n;
-    cout << "Enter number of persons: ";
+    cout << "Enter how many persons you want to add: ";
     cin >> n;
 
     if (n <= 0) {
-        cout << "Invalid number of persons." << endl;
+        cout << "Please enter a valid positive number." << endl;
         return 1;
     }
 
-    // 1. إدخال بيانات الأشخاص وحفظها في ملف persons.txt
+    // الخطوة 1: حفظ بيانات الأشخاص في ملف persons.txt
     ofstream outFile("persons.txt");
     if (!outFile.is_open()) {
-        cout << "Error opening persons.txt" << endl;
+        cout << "Error opening persons.txt for writing!" << endl;
         return 1;
     }
 
@@ -41,31 +41,31 @@ int main() {
     }
     outFile.close();
 
-    // 2. قراءة البيانات من الملف وتخزينها في vector<Person>
+    // الخطوة 2: قراءة البيانات من الملف وتخزينها في vector<Person>
     ifstream inFile("persons.txt");
     if (!inFile.is_open()) {
-        cout << "Error reading persons.txt" << endl;
+        cout << "Error opening persons.txt for reading!" << endl;
         return 1;
     }
 
     vector<Person> persons;
     Person temp;
     while (getline(inFile, temp.name) && (inFile >> temp.age)) {
-        inFile.ignore(); // لتخطي سطر جديد بعد العمر
+        inFile.ignore(); // تجاهل سطر الإدخال الجديد بعد قراءة العمر
         persons.push_back(temp);
     }
     inFile.close();
 
     if (persons.empty()) {
-        cout << "No persons data found." << endl;
+        cout << "No data found in persons.txt." << endl;
         return 1;
     }
 
-    // إيجاد الأصغر سناً والأكبر سناً
+    // إيجاد أصغر وأكبر شخص من الـ vector
     Person younger = persons[0];
     Person older = persons[0];
 
-    for (int i = 1; i < persons.size(); i++) {
+    for (size_t i = 1; i < persons.size(); i++) {
         if (persons[i].age < younger.age) {
             younger = persons[i];
         }
@@ -74,18 +74,18 @@ int main() {
         }
     }
 
-    // حفظ النتائج في ملف results.txt
-    ofstream resFile("results.txt");
-    if (!resFile.is_open()) {
-        cout << "Error opening results.txt" << endl;
+    // حفظ النتيجة في ملف results.txt
+    ofstream resultFile("results.txt");
+    if (!resultFile.is_open()) {
+        cout << "Error opening results.txt for writing!" << endl;
         return 1;
     }
 
-    resFile << "Younger Person: " << younger.name << " (" << younger.age << " years old)" << endl;
-    resFile << "Older Person: " << older.name << " (" << older.age << " years old)" << endl;
-    resFile.close();
+    resultFile << "Younger Person: " << younger.name << " (" << younger.age << ")" << endl;
+    resultFile << "Older Person: " << older.name << " (" << older.age << ")" << endl;
+    resultFile.close();
 
-    cout << "Data saved to persons.txt and results saved to results.txt successfully." << endl;
+    cout << "Saved persons to persons.txt and results to results.txt successfully." << endl;
 
     return 0;
 }
